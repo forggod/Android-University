@@ -23,6 +23,10 @@ class FacultyRepository private constructor() {
             return INSTANCE
                 ?: throw java.lang.IllegalStateException("Репозиторий Faculty Repository не иницилизирован")
         }
+
+        fun deleteStudent(id: UUID, student: Student) {
+            deleteStudent(id, student)
+        }
     }
 
     fun newFaculty(name: String) {
@@ -53,8 +57,8 @@ class FacultyRepository private constructor() {
         val u = university.value ?: return
 
 
-        val faculty = u.find { it?.groups?.find { it.id ==groupID } !=null} ?: return
-        val group = faculty.groups?.find { it.id==groupID }
+        val faculty = u.find { it?.groups?.find { it.id == groupID } != null } ?: return
+        val group = faculty.groups?.find { it.id == groupID }
         val list: ArrayList<Student> = if (group!!.student.isEmpty())
             ArrayList()
         else
@@ -66,8 +70,8 @@ class FacultyRepository private constructor() {
 
     fun deleteStudent(groupID: UUID, student: Student) {
         val u = university.value ?: return
-        val faculty = u.find { it?.groups?.find { it.id ==groupID } !=null} ?: return
-        val group = faculty.groups?.find { it.id==groupID }
+        val faculty = u.find { it?.groups?.find { it.id == groupID } != null } ?: return
+        val group = faculty.groups?.find { it.id == groupID } ?: return
         if (group!!.student.isEmpty()) return
         val list = group.student as ArrayList<Student>
         list.remove(student)
@@ -77,18 +81,18 @@ class FacultyRepository private constructor() {
 
     fun editStudent(groupID: UUID, student: Student) {
         val u = university.value ?: return
-        val faculty = u.find { it?.groups?.find { it.id ==groupID } !=null} ?: return
-        val group = faculty.groups?.find { it.id==groupID } ?:return
-        val _student = group.student.find {it.id==student.id}
-        if(_student==null){
-            newStudent(groupID,student)
+        val faculty = u.find { it?.groups?.find { it.id == groupID } != null } ?: return
+        val group = faculty.groups?.find { it.id == groupID } ?: return
+        val _student = group.student.find { it.id == student.id }
+        if (_student == null) {
+            newStudent(groupID, student)
             return
         }
 
         val list = group.student as ArrayList<Student>
-        val i=list.indexOf(_student)
+        val i = list.indexOf(_student)
         list.remove(student)
-        list.add(i,student)
+        list.add(i, student)
         group.student = list
         university.postValue(u)
     }

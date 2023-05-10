@@ -8,10 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.FragmentContainer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.second34_2.Data.Group
@@ -24,7 +22,7 @@ import java.util.*
 class GroupList(private val group: Group) : Fragment() {
     private var _binding: FragmentGroupListBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel:GroupListViewModel
+    private lateinit var viewModel: GroupListViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -35,13 +33,15 @@ class GroupList(private val group: Group) : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentGroupListBinding.inflate(inflater, container, false)
-        binding.recycleViewGroupList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.recycleViewGroupList.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recycleViewGroupList.adapter = GroupListAdapter(group?.student ?: emptyList())
+        viewModel = GroupListViewModel()
     }
 
     private inner class GroupHolder(view: View) : RecyclerView.ViewHolder(view),
@@ -56,10 +56,9 @@ class GroupList(private val group: Group) : Fragment() {
                 showDeleteDialog(student)
             }
             itemView.findViewById<ImageButton>(R.id.ibEdit).setOnClickListener {
-                callbacks?.showStudent(group.id,student)
+                callbacks?.showStudent(group.id, student)
             }
         }
-
 
 
         init {
@@ -69,23 +68,23 @@ class GroupList(private val group: Group) : Fragment() {
         override fun onClick(v: View) {
             val cl = itemView.findViewById<ConstraintLayout>(R.id.clButtons)
             cl.visibility = View.VISIBLE
-            lastItemView?.findViewById<ConstraintLayout>(R.id.clButtons)?.visibility=View.GONE
-            lastItemView = if (lastItemView==itemView) null else itemView
+            lastItemView?.findViewById<ConstraintLayout>(R.id.clButtons)?.visibility = View.GONE
+            lastItemView = if (lastItemView == itemView) null else itemView
         }
     }
 
     private var lastItemView: View? = null
 
-    private fun showDeleteDialog(student: Student){
-        val builder=AlertDialog.Builder(requireContext())
+    private fun showDeleteDialog(student: Student) {
+        val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(true)
         builder.setMessage("Удалить студента ${student.lastname} ${student.firstname} ${student.midlename} из списка?")
         builder.setTitle("Подтверждение")
         builder.setPositiveButton(getString(R.string.commit)) { _, _ ->
-            viewModel.deleteStudent(group.id,student)
+            viewModel.deleteStudent(group.id, student)
         }
-        builder.setNegativeButton("Отмена",null)
-        val alert=builder.create()
+        builder.setNegativeButton("Отмена", null)
+        val alert = builder.create()
         alert.show()
     }
 
@@ -102,6 +101,7 @@ class GroupList(private val group: Group) : Fragment() {
             holder.bind(items[position])
         }
     }
+
     interface Callbacks {
         fun showStudent(groupID: UUID, student: Student?)
     }

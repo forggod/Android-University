@@ -116,6 +116,7 @@ class StudentFragment : Fragment() {
                     set(GregorianCalendar.YEAR, binding.calendarID.dayOfMonth)
                 }
                 if (student == null) {
+                    student = Student()
                     student?.apply {
                         firstname = binding.editTextTextPersonNameFirstName.text.toString()
                         lastname = binding.editTextTextPersonNameLastName.text.toString()
@@ -137,8 +138,12 @@ class StudentFragment : Fragment() {
                 backPressedCallback.isEnabled = false
                 requireActivity().onBackPressedDispatcher.onBackPressed()
             }
-            val alert = builder.create()
-            alert.show()
         }
+        builder.setNegativeButton("Отмена") { _, _ ->
+            backPressedCallback.isEnabled = true
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+        val alert = builder.create()
+        alert.show()
     }
 }
