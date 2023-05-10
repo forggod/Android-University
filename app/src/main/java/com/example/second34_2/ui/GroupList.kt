@@ -51,7 +51,7 @@ class GroupList(private val group: Group) : Fragment() {
             this.student = student
             val s = "${student.lastname}. ${student.firstname.get(0)}. ${student.midlename.get(0)}."
             itemView.findViewById<TextView>(R.id.tvElement).text = s
-            itemView.findViewById<ConstraintLayout>(R.id.clButtons).visibility = View.GONE
+            itemView.findViewById<ConstraintLayout>(R.id.edButtons).visibility = View.GONE
             itemView.findViewById<ImageButton>(R.id.ibDelete).setOnClickListener {
                 showDeleteDialog(student)
             }
@@ -66,9 +66,9 @@ class GroupList(private val group: Group) : Fragment() {
         }
 
         override fun onClick(v: View) {
-            val cl = itemView.findViewById<ConstraintLayout>(R.id.clButtons)
+            val cl = itemView.findViewById<ConstraintLayout>(R.id.edButtons)
             cl.visibility = View.VISIBLE
-            lastItemView?.findViewById<ConstraintLayout>(R.id.clButtons)?.visibility = View.GONE
+            lastItemView?.findViewById<ConstraintLayout>(R.id.edButtons)?.visibility = View.GONE
             lastItemView = if (lastItemView == itemView) null else itemView
         }
     }
