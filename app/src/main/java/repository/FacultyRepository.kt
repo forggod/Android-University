@@ -55,8 +55,6 @@ class FacultyRepository private constructor() {
 
     fun newStudent(groupID: UUID, student: Student) {
         val u = university.value ?: return
-
-
         val faculty = u.find { it?.groups?.find { it.id == groupID } != null } ?: return
         val group = faculty.groups?.find { it.id == groupID }
         val list: ArrayList<Student> = if (group!!.student.isEmpty())
@@ -96,5 +94,4 @@ class FacultyRepository private constructor() {
         group.student = list
         university.postValue(u)
     }
-
 }
